@@ -30,38 +30,35 @@ class User(Base):
     __tablename__ = 'User'
     id = Column(Integer, primary_key=True,)
     username = Column(String(250), nullable=False)
-    firstname = Column(String(250), )
-    lastname = Column(String(250), )
+    firstname = Column(String(250), nullable=False)
+    lastname = Column(String(250), nullable=False)
     email = Column(String(250), unique=True)
 
 class Follower(Base):
     __tablename__ = 'Follower'
-    user_from_id = Column(Integer, )
-    user_to_id = Column(Integer, )
+    user_from_id = Column(Integer, ForeignKey('User.id'), primary_key=True)
+    user_to_id = Column(Integer, ForeignKey('User.id'))
 
 class Comment(Base):
     __tablename__ = 'Comment'
     id = Column(Integer, primary_key=True,)
+    user_id = Column(Integer, ForeignKey('User.id'))
     comment_text = Column(String(250), )
-    author_id = Column(Integer, )
-    post_id = Column(Integer, )
+    author_id = Column(Integer, nullable=False)
+    post_id = Column(Integer, ForeignKey('Post.id') )
 
 class Post(Base):
     __tablename__ = 'Post'
     id = Column(Integer, primary_key=True,)
-    user_id = Column(Integer, )
+    user_id = Column(Integer, ForeignKey('User.id'))
+    caption = Column(String(250), )
+    likes = Column(Integer, )
 
 class Media(Base):
     __tablename__ = 'Media'
     id = Column(Integer, primary_key=True,)
-    type = Column(enum)
     url = Column(String(250), )
-    post_id = column(String(250), )
-
-
-
-    def to_dict(self):
-        return {}
+    post_id = Column(String(250), ForeignKey('Post.id'))
 
 ## Draw from SQLAlchemy base
 try:
